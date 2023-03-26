@@ -1,16 +1,33 @@
-{% extends 'blog/base.html' %}
-{% block content %}
-    {% for post in posts %}
-    <article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata">
-            <a class="mr-2" href="{% url 'blog-user' post.author %}">{{ post.author }}</a>
-            <small class="text-muted">{{ post.date_posted|date:"F d, Y"  }}</small>
-          </div>
-          <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
-          <p class="article-content">{{ post.content }}</p>
-        </div>
-      </article>
-    {% endfor %}
-{% endblock content %}
-    
+{% extends 'blog/base.html' %} {% block content %} {% for post in posts %}
+<article class="media content-section">
+  <img
+    class="rounded-circle article-img"
+    src="{{ post.author.profile.image.url }}"
+  />
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{% url 'users-profile' post.author.id %}"
+        >{{ post.author }}</a
+      >
+      <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+    </div>
+    <h2>
+      <a class="article-title" href="{% url 'post-detail' post.pk %}"
+        >{{ post.title }}</a
+      >
+    </h2>
+    <p class="article-content">{{ post.content }}</p>
+  </div>
+
+  {% if post.liked_by_user %}
+  <a class="btn" href="{% url 'post-like' post.id %}"
+    ><i class="fa-solid fa-thumbs-up"></i
+  ></a>
+  {% else %}
+  <a class="btn" href="{% url 'post-like' post.id %}"
+    ><i class="fa-regular fa-thumbs-up"></i
+  ></a>
+  {% endif %}
+  <a class="btn"><i class="fa-regular fa-comment"></i></a>
+</article>
+{% endfor %} {% endblock content %}

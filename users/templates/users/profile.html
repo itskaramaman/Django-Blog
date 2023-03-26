@@ -1,5 +1,32 @@
-{% extends 'blog/base.html' %}
-{% load crispy_forms_tags %}
-{% block content %}
-    <h1>{{ user.username }}</h1>
+{% extends 'blog/base.html' %} {% load crispy_forms_tags %} {% block content %}
+<div class="content-section flex">
+  <div class="media">
+    <img
+      class="rounded-circle account-img"
+      src="{{ profile_user.profile.image.url }}"
+    />
+    <div class="media-body">
+      <h2 class="account-heading">{{ profile_user.username }}</h2>
+      <p class="text-secondary">{{ profile_user.email }}</p>
+    </div>
+  </div>
+  {% if profile_user != user %}
+  <div>
+    <legend class="border-bottom mb-4">Profile Info</legend>
+    <p><b>Name: </b>{{profile_user.firstname}} {{profile_user.last_name}}</p>
+    <p><b>Date Joined:</b>{{ profile_user.date_joined|date:"M, y" }}</p>
+  </div>
+  {% else %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Profile Info</legend>
+      {{ u_form|crispy }} {{ p_form|crispy }}
+    </fieldset>
+    <div class="form-group mt-2">
+      <button type="submit" class="btn btn-outline-info">Update</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
 {% endblock content %}
