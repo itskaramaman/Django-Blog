@@ -21,8 +21,8 @@ class Post(models.Model):
     def get_likes(self):
         return Like.objects.filter(user=self.author, post=self)
 
-    def liked_by_user(self):
-        return Like.objects.filter(user=self.author, post=self).first() != None
+    def liked_by_user(self, user):
+        return Like.objects.filter(user=user, post=self).first() != None
 
 
 class Comment(models.Model):
@@ -31,7 +31,7 @@ class Comment(models.Model):
     message = models.TextField()
 
     def __str__(self):
-        return f'{self.post} liked by {self.author}'
+        return self.message
 
 
 class Like(models.Model):
