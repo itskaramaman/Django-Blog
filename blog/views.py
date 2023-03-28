@@ -64,13 +64,5 @@ def like_post(request, pk):
         like.save()
     return redirect("/")
 
-def add_comment(request, pk):
-    if request.method == "POST":
-        pass
-    post = Post.objects.get(id=pk)
-    
-    return redirect("/")
-
-
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})

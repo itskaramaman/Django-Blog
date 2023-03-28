@@ -28,12 +28,12 @@
     ><i class="fa-solid fa-thumbs-up"></i
   ></a>
   {% else %}
-  <a class="btn" href="{% url 'post-comment' post.id %}"
+  <a class="btn" href="{% url 'post-like' post.id %}"
     ><i class="fa-regular fa-thumbs-up"></i
   ></a>
   {% endif %}
-  <a class="btn"><i class="fa-regular fa-comment"></i></a>
-  <form method="POST" action="{% url 'blog-home' post.id %}" class="container">
+  <button class="no-btn"><i id="comment-icon" class="fa-regular fa-comment"></i></button>
+  <form id="comment-form" method="POST" action="{% url 'blog-home' post.id %}" class="container">
     {% csrf_token %}
     <div class="row mb-1">
       <img class="rounded-circle comment-img col-2"
@@ -46,7 +46,7 @@
 </article>
   <!-- All Posts -->
   {% if post.comments %}
-  <div class="border p-2 mb-20">
+  <div id="comment-all" class="border p-2 mb-20">
     <h6>Comments</h4>
       {% for comment in post.comments %}
       <div class="row">

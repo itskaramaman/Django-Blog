@@ -109,3 +109,13 @@ a.article-title:hover {
 .bg-gray {
   background-color: rgb(242, 242, 242);
 }
+
+.no-btn {
+  background: none;
+  border: none;
+}
+
+#comment-form,
+#comment-all {
+  display: none;
+}

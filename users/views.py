@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 def register(request):
+    
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
+        import ipdb;ipdb.set_trace()
         if form.is_valid():
             form.save()
             messages.success(request, f'Your account has been created! You are now able to Login')
