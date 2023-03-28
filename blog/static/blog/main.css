@@ -115,7 +115,7 @@ a.article-title:hover {
   border: none;
 }
 
-#comment-form,
-#comment-all {
+.comment-form,
+.comment-all {
   display: none;
 }

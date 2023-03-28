@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %} {% block content %} {% for post in posts %}
+<div class="mb-20">
 <article class="media content-section">
   <section class="d-flex justify-content-start align-items-md-center">
     <img
@@ -23,21 +24,25 @@
     <p class="article-content">{{ post.content }}</p>
   </div>
 
-  {% if post.liked_by_cur_user %}
-  <a class="btn" href="{% url 'post-like' post.id %}"
-    ><i class="fa-solid fa-thumbs-up"></i
-  ></a>
-  {% else %}
-  <a class="btn" href="{% url 'post-like' post.id %}"
-    ><i class="fa-regular fa-thumbs-up"></i
-  ></a>
-  {% endif %}
-  <button class="no-btn"><i id="comment-icon" class="fa-regular fa-comment"></i></button>
-  <form id="comment-form" method="POST" action="{% url 'blog-home' post.id %}" class="container">
+  <!-- Like And Comment -->
+  <div>
+    {% if post.liked_by_cur_user %}
+    <a class="btn" href="{% url 'post-like' post.id %}"
+      ><i class="fa-solid fa-thumbs-up"></i
+    ></a>
+    {% else %}
+    <a class="btn" href="{% url 'post-like' post.id %}"
+      ><i class="fa-regular fa-thumbs-up"></i
+    ></a>
+    {% endif %}
+    <button class="no-btn"><i onclick="toggleComment('{{post.id}}')" class="fa-regular fa-comment"></i></button>
+  </div>
+
+  <form id="comment-form-{{post.id}}" method="POST" action="{% url 'blog-home' post.id %}" class="comment-form container">
     {% csrf_token %}
     <div class="row mb-1">
       <img class="rounded-circle comment-img col-2"
-      src="{{ post.author.profile.image.url }}"
+      src="{{ user.profile.image.url }}"
       />
       <input type="text" class="col-8" name="comment" placeholder="Add a comment" />
       <button type="submit" class="mx-2 btn btn-sm btn-dark col-1">Post</button>
@@ -46,20 +51,27 @@
 </article>
   <!-- All Posts -->
   {% if post.comments %}
-  <div id="comment-all" class="border p-2 mb-20">
+  <div id="comment-all-{{post.id}}" class="comment-all border p-2 mb-20">
     <h6>Comments</h4>
       {% for comment in post.comments %}
       <div class="row">
         <img class="rounded-circle comment-img col-2"
-      src="{{ post.author.profile.image.url }}"
+      src="{{ comment.author.profile.image.url }}"
       />
         <section class="col-10 bg-gray">
           <a href="{% url 'users-profile' comment.author.id %}">{{ comment.author.username }}</a>
-          <p>{{ comment }}</p></section>
+          <div class="row">
+            <div class="col-10">
+              <p>{{ comment }}</p>
+            </div>
+            <div class="col-2">
+              <small class="text-muted">{{ comment.date_posted|timesince  }}</small>
+            </div>
+          </div>
+          </section>
       </div>
       {% endfor %}
   </div>
-  {% else %}
-  <div class="mb-20"></div>
-{% endif %}
+  {% endif %}
+</div>
 {% endfor %} {% endblock content %}

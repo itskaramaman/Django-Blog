@@ -6,7 +6,6 @@ from .models import Profile
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
-    import ipdb; ipdb.set_trace()
     if created:
         Profile.objects.create(user=instance)
 

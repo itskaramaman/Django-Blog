@@ -16,7 +16,7 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
     def get_comments(self):
-        return Comment.objects.filter(author=self.author, post=self)
+        return Comment.objects.filter(post=self)
 
     def get_likes(self):
         return Like.objects.filter(user=self.author, post=self)
@@ -29,6 +29,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, default=None, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.message
