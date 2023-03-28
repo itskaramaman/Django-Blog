@@ -16,10 +16,10 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
     def get_comments(self):
-        return Comment.objects.filter(post=self)
+        return Comment.objects.filter(post=self).order_by('-date_posted')
 
     def get_likes(self):
-        return Like.objects.filter(user=self.author, post=self)
+        return Like.objects.filter(post=self)
 
     def liked_by_user(self, user):
         return Like.objects.filter(user=user, post=self).first() != None

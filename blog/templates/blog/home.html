@@ -24,8 +24,14 @@
     <p class="article-content">{{ post.content }}</p>
   </div>
 
+  <!-- Count of like and comment -->
+  <div class="text-sm text-muted">
+    <small>{{post.get_likes.count}} Likes</small>
+    <small>{{post.comments.count}} Comments</small>
+  </div>
+
   <!-- Like And Comment -->
-  <div>
+  <div class="d-flex align-items-md-center">
     {% if post.liked_by_cur_user %}
     <a class="btn" href="{% url 'post-like' post.id %}"
       ><i class="fa-solid fa-thumbs-up"></i
@@ -49,11 +55,11 @@
     </div>
   </form>
 </article>
-  <!-- All Posts -->
+  <!-- All Posts comments -->
   {% if post.comments %}
   <div id="comment-all-{{post.id}}" class="comment-all border p-2 mb-20">
     <h6>Comments</h4>
-      {% for comment in post.comments %}
+      {% for comment in post.comments.all %}
       <div class="row">
         <img class="rounded-circle comment-img col-2"
       src="{{ comment.author.profile.image.url }}"

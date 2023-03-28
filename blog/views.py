@@ -1,7 +1,23 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView)
+from django.db.models import Count
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView)
 from .models import Post, Like, Comment
+
+side_bar = {
+    'most_liked_post': None
+}
+
+def get_side_bar():
+    most_liked_post_id = Like.objects.all().values('post').annotate(Count('post')).order_by('-post__count')[0]['post']
+    most_liked_post = Post.objects.get(id=most_liked_post_id)
+    side_bar['most_liked_post'] = most_liked_post
+
 
 def home(request, pk=None):
     if request.method == "POST":
@@ -11,12 +27,12 @@ def home(request, pk=None):
         comment.save()
         return redirect("/")
 
-
-    posts = Post.objects.all().order_by("-date_posted")
+    posts = Post.objects.select_related('author').all().order_by("-date_posted")
     for post in posts:
-        post.liked_by_cur_user = post.liked_by_user(request.user)
+        post.liked_by_cur_user = post.liked_by_user(request.user.id)
         post.comments = post.get_comments()
-    context = {'posts': posts}
+
+    context = {'posts': posts, 'side_bar': side_bar}
     return render(request, 'blog/home.html', context)
 
 class PostListView(ListView):

@@ -38,6 +38,11 @@ def profile(request, id=None):
             u_form = UserUpdateForm(instance=request.user)
             p_form = ProfileUpdateForm(instance=request.user.profile)
 
+    def get_context_data(self, **kwargs):
+        context = super(PostCreateView, self).get_context_data(**kwargs)
+        get_side_bar()
+        context['side_bar'] = side_bar
+        return context
 
     context = {
         'profile_user': profile_user,
