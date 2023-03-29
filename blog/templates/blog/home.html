@@ -32,15 +32,18 @@
 
   <!-- Like And Comment -->
   <div class="d-flex align-items-md-center">
-    {% if post.liked_by_cur_user %}
-    <a class="btn" href="{% url 'post-like' post.id %}"
-      ><i class="fa-solid fa-thumbs-up"></i
-    ></a>
-    {% else %}
-    <a class="btn" href="{% url 'post-like' post.id %}"
-      ><i class="fa-regular fa-thumbs-up"></i
-    ></a>
-    {% endif %}
+    <form  method="POST" action="{% url 'blog-home' pk=post.id %}">
+      {% csrf_token %}
+      {% if post.liked_by_cur_user %}
+      <button class="btn" href="{% url 'blog-home' post.id %}"
+        ><i class="fa-solid fa-thumbs-up"></i
+      ></button>
+      {% else %}
+      <button class="btn" href="{% url 'blog-home' post.id %}"
+        ><i class="fa-regular fa-thumbs-up"></i
+      ></button>
+      {% endif %}
+    </form>
     <button class="no-btn"><i onclick="toggleComment('{{post.id}}')" class="fa-regular fa-comment"></i></button>
   </div>
 
