@@ -24,8 +24,8 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('jobs/', include('job.urls')),
     path('users/', include('users.urls')),
-    path('debug/', include('debug_toolbar.urls')),
 ] 
 
 if settings.DEBUG:
+    urlpatterns.append(path('debug/', include('debug_toolbar.urls')))
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

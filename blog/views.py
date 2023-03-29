@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.db.models import Count
 from django.views.generic import (
@@ -26,13 +27,15 @@ def home(request, pk=None):
         comment = Comment(post=post, author=request.user, message=message)
         comment.save()
         return redirect("/")
-
+    
+    page = request.GET.get('page', 1)
     posts = Post.objects.select_related('author').all().order_by("-date_posted")
     for post in posts:
         post.liked_by_cur_user = post.liked_by_user(request.user.id)
         post.comments = post.get_comments()
 
-    context = {'posts': posts, 'side_bar': side_bar}
+    paginator = Paginator(posts, 5)
+    context = {'posts': paginator.page(page), 'side_bar': side_bar}
     return render(request, 'blog/home.html', context)
 
 class PostListView(ListView):
@@ -40,6 +43,7 @@ class PostListView(ListView):
     template_name = "blog/home.html"
     context_object_name = "posts"
     ordering = ['-date_posted']
+    paginate_by = 2
 
 
 class PostDetailView(DetailView):

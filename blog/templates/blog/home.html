@@ -44,7 +44,7 @@
     <button class="no-btn"><i onclick="toggleComment('{{post.id}}')" class="fa-regular fa-comment"></i></button>
   </div>
 
-  <form id="comment-form-{{post.id}}" method="POST" action="{% url 'blog-home' post.id %}" class="comment-form container">
+  <form id="comment-form-{{post.id}}" method="POST" action="{% url 'blog-home' pk=post.id %}" class="comment-form container">
     {% csrf_token %}
     <div class="row mb-1">
       <img class="rounded-circle comment-img col-2"
@@ -80,4 +80,25 @@
   </div>
   {% endif %}
 </div>
-{% endfor %} {% endblock content %}
+{% endfor %} 
+
+<!-- Pagination -->
+{% if posts.has_previous %}
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page=1">First</a>
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page={{posts.previous_page_number}}">Previous</a>
+{% endif %}
+
+{% for num in posts.paginator.page_range %}
+  {% if posts.number == num %}
+    <a class="btn btn-sm btn-info mb-4" href="?page={{num}}">{{ num }}</a>
+  {% elif num > posts.number|add:'-3' %}
+    <a class="btn btn-sm btn-outline-info mb-4" href="?page={{num}}">{{ num }}</a>
+  {% endif %}
+{% endfor %}
+
+{% if posts.has_next %}
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page={{posts.next_page_number}}">Next</a>
+  <a class="btn btn-sm btn-outline-info mb-4" href="?page={{posts.paginator.num_pages}}">Last</a>
+{% endif %}
+
+{% endblock content %}
